@@ -1,40 +1,78 @@
 # LivePanel
 
-## Vision
-LivePanel is the future Starsong ecosystem dashboard and orchestration application.
+Status: `Concept`
 
 ## Purpose
-Its purpose is to provide a single local-first place to observe, coordinate, and interact with multiple Starsong applications without making those applications dependent on it.
+LivePanel is currently envisioned as a future unified ecosystem dashboard for Starsong Tools.
+
+Its purpose is to provide:
+
+- a single-pane-of-glass view across Starsong applications
+- optional orchestration support
+- ecosystem visibility without making other applications dependent on it
+
+The current vision is not to centralize all creator workflows into one large application. The vision is to give the ecosystem a local-first coordination and visibility layer when that becomes useful.
+
+## Ecosystem Role
+LivePanel is intended to fill the visibility and coordination gap between independent Starsong applications.
+
+It exists conceptually because:
+
+- the ecosystem is growing beyond a single product
+- future contributors may need one place to observe ecosystem health and state
+- profile coordination may eventually benefit from a dedicated orchestration surface
+
+LivePanel complements the existing applications by sitting above them as an optional layer. It does not replace their owned responsibilities.
 
 ## Relationship to SIP
-LivePanel should participate through SIP like any other Starsong application.
+LivePanel consumes SIP.
 
-It should:
+LivePanel is also a SIP participant.
 
-- discover SIP-compliant applications
+LivePanel does not own SIP.
+
+LivePanel receives no special protocol privileges.
+
+Its role should be to use the same ecosystem rules as every other SIP-capable application:
+
+- discover participants
+- inspect identity
 - read health and status
-- inspect capabilities
-- trigger lightweight actions
-
-LivePanel must not become the protocol owner.
+- detect capabilities
+- trigger allowed actions
 
 ## Relationship to Profiles
-LivePanel is a natural future home for Starsong Profile orchestration.
+Profiles remain application-owned.
 
-It should be able to:
+LivePanel may coordinate profile activation.
 
-- discover profile-capable applications
-- build Starsong Profiles
-- activate Starsong Profiles
-- present activation summaries
+LivePanel does not replace application profile systems.
 
-without requiring protocol exceptions or privileged access.
+Its likely future role is to help a user activate a Starsong Profile across participating applications while preserving each application’s ownership of its own profile definitions.
 
-## High-Level Roadmap
-- SIP readiness review
-- SIP adoption planning across current applications
-- LivePanel specification
-- profile orchestration planning
-- dashboard and summary UX definition
+## Non-Goals
+- Not a replacement for StreamSignal
+- Not a replacement for TideReader
+- Not a replacement for TuberSwitch
+- Not a plugin marketplace
+- Not a workflow automation engine
+- Not a cloud platform
+- Not required for ecosystem operation
 
-Implementation details are intentionally out of scope at this stage.
+## Future Possibilities
+Already-identified ecosystem opportunities include:
+
+- application health visibility
+- status aggregation
+- profile coordination
+- application launching
+- broader ecosystem visibility
+
+These are opportunities for future planning, not implementation commitments.
+
+## Open Questions
+- How should discovery be presented to users?
+- How should profile coordination work without overreaching into application-owned behavior?
+- What belongs in LivePanel versus individual applications?
+- Where should scope boundaries exist so LivePanel stays useful without becoming bloated?
+- How much orchestration is helpful before integration becomes unnecessary coupling?
