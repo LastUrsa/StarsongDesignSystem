@@ -1,20 +1,23 @@
 # Starsong Integration Protocol v1 (SIP-v1)
 
 ## Purpose
-The Starsong Integration Protocol v1 defines a common communication standard for Starsong Tools applications.
+The Starsong Integration Protocol v1 defines a shared module contract for Starsong Tools applications.
 
 SIP-v1 enables Starsong applications to:
 
 - discover other Starsong applications
 - report health and status
 - expose capabilities
-- execute actions
+- expose profile information
 - activate profiles
-- exchange ecosystem information
 
 while remaining fully independent products.
 
 SIP-v1 is an ecosystem protocol. It is not owned by any individual application.
+
+SIP-v1 is intentionally not a public application API.
+
+Its purpose is to let future orchestration tools such as `LivePanel` identify modules, verify health, discover capabilities, read status, and work with profiles without product-specific integration logic.
 
 ## Goals
 
@@ -32,8 +35,11 @@ SIP-v1 does not attempt to provide:
 - user accounts
 - authentication systems
 - remote network access
+- command execution
 - workflow automation engines
+- cross-module orchestration
 - event streaming
+- service lifecycle management
 - shared data storage
 
 These may be considered for future protocol versions.
@@ -140,6 +146,8 @@ However:
 
 LivePanel should participate using the same SIP endpoints as every other application.
 
+LivePanel is an orchestration layer over standalone Starsong applications, not a replacement for them.
+
 ## Transport Layer
 
 ### Protocol
@@ -227,6 +235,7 @@ Future applications should not require updates to existing applications.
   "appId": "streamsignal",
   "name": "StreamSignal",
   "version": "0.3.0",
+  "mode": "standalone",
   "protocolVersion": "1.0"
 }
 ```
@@ -250,6 +259,18 @@ Human-readable product name.
 
 #### `version`
 Application version.
+
+#### `mode`
+Runtime mode for the current application instance.
+
+Valid values:
+
+```text
+standalone
+service
+```
+
+Current implementations may always return `standalone` until service-mode support exists.
 
 #### `protocolVersion`
 Implemented SIP version.
@@ -291,7 +312,6 @@ Allow applications to advertise supported functionality.
 ```json
 {
   "supportsProfiles": true,
-  "supportsQuickActions": true,
   "supportsStatusReporting": true
 }
 ```
@@ -330,42 +350,6 @@ offline
 ```
 
 Applications may expose additional product-specific states.
-
-## Actions
-
-### Purpose
-Allow lightweight interaction between applications.
-
-### Action Discovery
-`GET /api/v1/actions`
-
-### Response
-```json
-{
-  "actions": [
-    "open",
-    "activateProfile",
-    "refresh"
-  ]
-}
-```
-
-### Execute Action
-`POST /api/v1/action`
-
-### Request
-```json
-{
-  "action": "open"
-}
-```
-
-### Response
-```json
-{
-  "success": true
-}
-```
 
 ## Profiles
 
@@ -439,7 +423,6 @@ Consumers should never depend on extension endpoints for core SIP functionality.
 ### Common Error Types
 ```text
 ProfileNotFound
-UnsupportedAction
 InvalidRequest
 ApplicationBusy
 ProtocolMismatch
@@ -524,7 +507,6 @@ May aggregate:
 
 - health
 - status
-- actions
 - profiles
 - capabilities
 

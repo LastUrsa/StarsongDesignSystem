@@ -13,6 +13,8 @@ It does not assume major architectural redesign.
 
 The purpose is to determine whether `StreamSignal` is the correct first SIP participant and define the smallest useful prototype capable of validating SIP-v1 in a real application.
 
+This plan treats SIP-v1 as a shared module contract, not a public application API.
+
 ## References
 - `DesignSystem/Starsong-Design-System-v1.1.md`
 - `DesignSystem/Starsong-Ecosystem-Review-v1.1.md`
@@ -52,7 +54,6 @@ Should `StreamSignal` become the first SIP participant?
 
 - stable product identity
 - meaningful app health and workflow state
-- existing lightweight actions
 - real named application-owned profiles
 - clear separation between profile selection and workflow execution
 
@@ -60,7 +61,7 @@ The main missing piece is technical transport, not product fit.
 
 SIP does not require `StreamSignal` to invent new ecosystem abstractions first.
 
-It requires `StreamSignal` to expose a careful localhost-facing summary of capabilities it already has.
+It requires `StreamSignal` to expose a careful localhost-facing summary of capabilities, status, and profiles it already has.
 
 ### Key Findings
 
@@ -135,7 +136,6 @@ These do not map one-to-one to SIP status fields, but they provide enough raw ma
 #### New infrastructure required
 - a localhost SIP server layer
 - a translation layer from existing app services into SIP response models
-- a small action dispatcher for safe SIP actions
 
 #### Abstraction required
 - a stable SIP health model
@@ -145,7 +145,6 @@ These do not map one-to-one to SIP status fields, but they provide enough raw ma
 #### Careful design required
 - distinction between profile activation and publishing
 - distinction between app health and publish success likelihood
-- distinction between safe actions and high-consequence actions
 - handling startup and shutdown cleanly when a SIP surface exists
 
 ### Complexity Assessment
@@ -175,6 +174,7 @@ Return a minimal identity object:
 - `appId`: `streamsignal`
 - `name`: `StreamSignal`
 - `version`: current application version
+- `mode`: `standalone`
 - `protocolVersion`: `1.0`
 
 ### Estimated difficulty
@@ -294,7 +294,6 @@ Expose only capability flags that represent real product-level abilities.
 ```json
 {
   "supportsProfiles": true,
-  "supportsQuickActions": true,
   "supportsStatusReporting": true,
   "supportsPreview": true,
   "supportsAnnouncements": true
@@ -303,7 +302,6 @@ Expose only capability flags that represent real product-level abilities.
 
 ### What should realistically be exposed
 - `supportsProfiles`
-- `supportsQuickActions`
 - `supportsStatusReporting`
 - `supportsPreview`
 - `supportsAnnouncements`
@@ -372,56 +370,32 @@ None of these are blockers.
 
 They are implementation-detail decisions inside an otherwise strong mapping.
 
-## 5. Action Mapping Review
+## 5. Profile Boundary Review
 
-### Existing StreamSignal functionality with realistic SIP action alignment
-- open application window
-- refresh summary state
-- generate preview
-- activate profile
-- inspect diagnostics or logs internally
-- test destination connection internally
-- execute `Go Live`
-- execute `End Stream`
-- execute `Force Go Live`
+### Important `StreamSignal` boundary
+`StreamSignal` already has execution-heavy product behaviors, but SIP-v1 should not expose them.
 
-### Action Discovery
-`GET /api/v1/actions`
+### What remains in scope for SIP-v1
+- identity
+- health
+- capabilities
+- status
+- profile discovery
+- profile activation
 
-### Recommended first-pass actions
-- `open`
-- `refresh`
-- `generatePreview`
-
-### Actions that exist in product terms but should not be first-prototype SIP actions
-- `goLive`
-- `endStream`
-- `forceGoLive`
+### What remains out of scope for SIP-v1
+- `Go Live`
+- `End Stream`
+- `Force Go Live`
 - destination configuration edits
 - destination connection testing
+- remote command execution
+- workflow orchestration
 
-### Why these should wait
-- they are higher consequence
-- some require payloads that are closer to app-internal editing flows
-- they raise safety and UX concerns before the core SIP model is proven
-
-### Action Execution
-`POST /api/v1/action`
-
-### Realistic first-pass execution model
-- `open` focuses or reveals the application
-- `refresh` refreshes summary state or reloadable SIP-visible state
-- `generatePreview` validates and previews the current working announcement context
-
-### Complexity Assessment
-`Medium`
-
-### Why
-The app already has the functionality, but actions need:
-
-- a SIP-facing dispatcher
-- response normalization
-- careful restriction of high-consequence behaviors
+### Why this boundary matters
+- it keeps SIP aligned with the standalone-first Starsong model
+- it avoids turning the first implementation into an automation surface
+- it preserves a clean separation between profile selection and execution
 
 ## 6. Minimum Viable SIP Prototype
 
@@ -444,24 +418,18 @@ Without these four endpoints, the prototype cannot validate the most basic SIP p
 ### Recommended Endpoints
 These add strong validation value and should be included in the first useful prototype:
 
-- `GET /api/v1/actions`
-- `POST /api/v1/action` for safe actions only
 - `GET /api/v1/profiles`
 - `POST /api/v1/profile`
 
 ### Why these are recommended
 They prove the most valuable ecosystem assumptions:
 
-- actions can be exposed conservatively
 - profiles can be exposed from a real application-owned system
 - Profiles v1 is practical, not just theoretical
 
 ### Deferred Endpoints
 The following should wait:
 
-- `POST /api/v1/action` for `goLive`
-- `POST /api/v1/action` for `endStream`
-- `POST /api/v1/action` for `forceGoLive`
 - any extension namespace endpoints beyond the minimum prototype need
 
 ### Smallest Useful Prototype
@@ -470,7 +438,6 @@ The smallest useful prototype is not just identity and status.
 It is:
 
 - core discovery endpoints
-- safe actions
 - real profile discovery
 - real profile activation
 
@@ -592,7 +559,6 @@ It is the strongest current fit across:
 
 - product maturity
 - named profile readiness
-- action safety options
 - meaningful workflow status
 - ecosystem planning value
 
@@ -607,16 +573,10 @@ The smallest useful SIP implementation should include:
 - `GET /api/v1/health`
 - `GET /api/v1/capabilities`
 - `GET /api/v1/status`
-- `GET /api/v1/actions`
-- `POST /api/v1/action` for `open`, `refresh`, and optionally `generatePreview`
 - `GET /api/v1/profiles`
 - `POST /api/v1/profile`
 
-And should explicitly defer:
-
-- `goLive`
-- `endStream`
-- `forceGoLive`
+And should explicitly keep command and orchestration concerns out of v1.
 
 ### Recommended Next Step
 `Build StreamSignal SIP Prototype`
@@ -629,7 +589,6 @@ The ecosystem now has enough standards documentation to move from planning into 
 - SIP discovery
 - SIP health and status
 - capability-driven integration
-- safe action exposure
 - real profile discovery
 - real profile activation
 

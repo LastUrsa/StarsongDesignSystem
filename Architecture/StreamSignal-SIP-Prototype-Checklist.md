@@ -3,6 +3,8 @@
 ## Purpose
 This document defines a documentation-only prototype checklist for `StreamSignal` as the likely first SIP-v1 participant.
 
+SIP-v1 is treated here as a shared module contract, not a public application API.
+
 It is intended to:
 
 - validate SIP-v1 against a real Starsong application
@@ -18,7 +20,6 @@ It does not define code structure, transport internals, or architecture redesign
 
 - clear application identity
 - meaningful workflow status
-- useful lightweight actions
 - real named profiles
 - strong alignment with the local-first Starsong ecosystem model
 
@@ -30,9 +31,8 @@ A successful `StreamSignal` SIP prototype proves that a real Starsong applicatio
 - identify itself consistently
 - report health and status in a stable way
 - expose capabilities clearly
-- support safe ecosystem actions
 - expose real application-owned profiles
-- activate profiles without taking unintended higher-risk actions
+- activate profiles without triggering execution behavior
 
 ## Prototype Success Criteria
 
@@ -43,7 +43,6 @@ The prototype is successful if `StreamSignal` can participate in SIP-v1 as a sta
 - SIP can be added to a real desktop application without turning it into an ecosystem hub.
 - SIP identity, health, capabilities, and status are practical in day-to-day use.
 - profile discovery and profile activation work cleanly with a real existing profile system
-- actions can be exposed conservatively without overreaching into risky orchestration
 - the app remains fully useful and understandable even when no other Starsong application is present
 
 ## Prototype Scope
@@ -53,8 +52,6 @@ The prototype is successful if `StreamSignal` can participate in SIP-v1 as a sta
 - `GET /api/v1/health`
 - `GET /api/v1/capabilities`
 - `GET /api/v1/status`
-- `GET /api/v1/actions`
-- `POST /api/v1/action` for safe actions only
 - `GET /api/v1/profiles`
 - `POST /api/v1/profile`
 
@@ -62,19 +59,13 @@ The prototype is successful if `StreamSignal` can participate in SIP-v1 as a sta
 - cloud behavior
 - remote network access
 - multi-app orchestration logic
+- command execution
 - shared profile storage
 - event systems
 - automation pipelines
+- authentication systems
+- service lifecycle management
 - exposing every internal StreamSignal workflow detail
-
-### Explicitly Deferred
-- `goLive` as a SIP action
-- `endStream` as a SIP action
-- `forceGoLive` as a SIP action
-
-These are not excluded forever.
-
-They are deferred because the first SIP prototype should prove the protocol safely before exposing high-consequence publish behavior.
 
 ## Milestone Checklist
 
@@ -86,6 +77,7 @@ Checklist:
 - `appId` is stable and uses `streamsignal`
 - application name is human-readable and consistent
 - version can be reported reliably
+- `mode` is present and currently reports `standalone`
 - reported `protocolVersion` matches `SIP-v1`
 - identity response is simple and does not leak internal implementation details
 
@@ -114,12 +106,10 @@ Checklist:
 - capabilities reflect existing product abilities
 - capability names stay product-level rather than implementation-level
 - `supportsProfiles` is present because the app already has real profiles
-- `supportsQuickActions` is present only if the first safe action set is actually supported
 - status-related capability reporting remains aligned with what the app can reliably provide
 
 Likely success vocabulary:
 - `supportsProfiles`
-- `supportsQuickActions`
 - `supportsStatusReporting`
 - `supportsPreview`
 - `supportsAnnouncements`
@@ -142,26 +132,7 @@ Checklist:
 Success signal:
 An external consumer can display a useful StreamSignal summary without custom app-specific parsing logic.
 
-## 5. Safe Actions Milestone
-Goal:
-`StreamSignal` exposes only low-risk SIP actions in the prototype phase.
-
-Checklist:
-- the first action set is intentionally conservative
-- actions remain understandable to users and developers
-- action execution results can be summarized clearly
-- action names do not imply hidden side effects
-- high-consequence publish actions are not part of the prototype milestone
-
-Recommended prototype action scope:
-- `open`
-- `refresh`
-- optionally `generatePreview`
-
-Success signal:
-SIP actions feel safe, inspectable, and useful without turning the protocol into a remote publish trigger.
-
-## 6. Profile Discovery Milestone
+## 5. Profile Discovery Milestone
 Goal:
 `StreamSignal` proves that SIP-v1 profile discovery works with a real existing application profile system.
 
@@ -174,21 +145,21 @@ Checklist:
 Success signal:
 The prototype demonstrates a real, production-relevant use of `GET /api/v1/profiles`.
 
-## 7. Profile Activation Milestone
+## 6. Profile Activation Milestone
 Goal:
 `StreamSignal` proves that SIP profile activation can work safely with a real application.
 
 Checklist:
 - profile activation selects or applies a named announcement profile
 - profile activation does not automatically publish
-- profile activation is clearly distinct from execution actions
+- profile activation is clearly distinct from execution behavior
 - profile activation failure can be reported cleanly
 - unsupported or unknown profile names can be handled gracefully
 
 Success signal:
 The prototype proves that `POST /api/v1/profile` is practical and safe in a real product without blurring application ownership.
 
-## 8. Independence Milestone
+## 7. Independence Milestone
 Goal:
 `StreamSignal` remains a fully independent product after SIP participation is added.
 
@@ -202,7 +173,7 @@ Checklist:
 Success signal:
 SIP enhances the product without redefining what the product is.
 
-## 9. Human Debuggability Milestone
+## 8. Human Debuggability Milestone
 Goal:
 The prototype is simple enough to inspect and reason about during development.
 
@@ -215,7 +186,7 @@ Checklist:
 Success signal:
 The first SIP participant is easy to test manually and easy to explain to future app implementers.
 
-## 10. Prototype Review Milestone
+## 9. Prototype Review Milestone
 Goal:
 The prototype yields enough evidence to confirm or refine SIP-v1 before wider adoption.
 
@@ -223,7 +194,7 @@ Checklist:
 - the team can confirm which SIP concepts mapped cleanly
 - the team can identify which terms felt ambiguous in real use
 - the team can confirm that profile handling worked as intended
-- the team can confirm that conservative action scoping was the right decision
+- the team can confirm that the read-focused contract stayed intentionally small
 - the team can identify whether any capability names should be refined before the next app adopts SIP
 
 Success signal:
@@ -235,7 +206,6 @@ The `StreamSignal` SIP prototype should be considered complete when all of the f
 - `StreamSignal` can be discovered and identified cleanly
 - health and status reporting are stable and meaningful
 - capability reporting is small, clear, and accurate
-- safe actions are usable without exposing high-risk publish behavior
 - announcement profiles are discoverable through SIP
 - announcement profiles can be activated through SIP without triggering publishing
 - the product remains independent and understandable
@@ -256,7 +226,7 @@ For `StreamSignal`, success means:
 
 - strong core SIP participation
 - real profile support
-- conservative action exposure
+- a lightweight read-focused contract
 - no loss of publishing safety boundaries
 
 ## Recommended Prototype Outcome

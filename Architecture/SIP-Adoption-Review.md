@@ -40,7 +40,6 @@ The protocol fits the existing app boundaries well because:
 
 - all three applications have clear product identity
 - all three applications have meaningful local status
-- all three applications can expose lightweight actions without breaking product independence
 - all three applications are local-first and already conceptually aligned with localhost communication
 
 The main uneven area is profile support.
@@ -61,7 +60,7 @@ The main uneven area is profile support.
 
 `TideReader` is the easiest technical HTTP participant after that, but should defer profile support until named overlay profiles exist.
 
-`TuberSwitch` is a good later participant once action scope and profile semantics are clarified around mode switching and external-system effects.
+`TuberSwitch` is a good later participant once profile semantics are clarified around mode-oriented behavior and external-system effects.
 
 ## Shared SIP-v1 Validation Notes
 
@@ -74,8 +73,6 @@ The main uneven area is profile support.
 These endpoints are practical for every current application.
 
 ### What Needs Care Across All Three Apps
-- `GET /api/v1/actions`
-- `POST /api/v1/action`
 - `GET /api/v1/profiles`
 - `POST /api/v1/profile`
 
@@ -83,16 +80,13 @@ The concerns are not protocol-level concerns.
 
 They are product-safety concerns:
 
-- whether an action is low-risk enough to expose
 - whether a product already has meaningful named profiles
-- whether profile activation is clearly distinct from direct execution
+- whether profile activation is clearly distinct from direct execution behavior
 
 ### Shared Recommendation
 Every first SIP implementation should distinguish between:
 
 - discovery and observation endpoints
-- safe utility actions
-- high-consequence actions
 - true profile activation
 
 That distinction is especially important for `StreamSignal` and `TuberSwitch`.
@@ -122,6 +116,7 @@ Likely implementation:
 - `appId`: `streamsignal`
 - `name`: `StreamSignal`
 - `version`: current app version
+- `mode`: `standalone`
 - `protocolVersion`: `1.0`
 
 Complexity: `Low`
@@ -138,7 +133,8 @@ Likely implementation:
 
 Likely health states:
 
-- `healthy`
+- `ready`
+- `busy`
 - `degraded`
 - `error`
 
@@ -160,7 +156,6 @@ Risk:
 Likely capability flags:
 
 - `supportsProfiles`
-- `supportsQuickActions`
 - `supportsStatusReporting`
 - `supportsPreview`
 - `supportsAnnouncements`
@@ -168,7 +163,6 @@ Likely capability flags:
 Recommended first-pass interpretation:
 
 - `supportsProfiles`: true
-- `supportsQuickActions`: true
 - `supportsStatusReporting`: true
 - `supportsPreview`: true
 - `supportsAnnouncements`: true
@@ -206,50 +200,6 @@ Risk:
 - Avoid encoding direct publish semantics into too many status states.
 - Keep the status stable enough for future consumers like `LivePanel`.
 
-#### `GET /api/v1/actions`
-Recommended first-pass actions:
-
-- `open`
-- `refresh`
-- `generatePreview`
-
-Recommended deferred or gated actions:
-
-- `goLive`
-- `endStream`
-
-Recommended not to expose in the first SIP pass:
-
-- `forceGoLive`
-
-Complexity: `Medium`
-
-Risk:
-- `goLive` and `endStream` are high-consequence actions and should not be exposed until the command model, confirmation model, and payload model are proven.
-
-Recommendation:
-- Ship safe utility actions first.
-- Treat publish actions as phase-1.5 or phase-2 for `StreamSignal`, even if the app is still the first SIP participant.
-
-#### `POST /api/v1/action`
-Likely action mappings:
-
-- `open` -> focus or reveal the app window
-- `refresh` -> refresh derived state or reload app summary state
-- `generatePreview` -> generate preview for the currently selected or supplied announcement context
-
-Deferred mappings:
-
-- `goLive` -> execute publish workflow
-- `endStream` -> execute end-stream workflow
-
-Complexity: `Medium`
-
-Dependency:
-- requires a local SIP server layer
-- requires action payload validation
-- requires clear safety rules for execution actions
-
 #### `GET /api/v1/profiles`
 Likely implementation:
 
@@ -285,14 +235,8 @@ Critical validation note:
 - `GET /api/v1/health`
 - `GET /api/v1/capabilities`
 - `GET /api/v1/status`
-- `GET /api/v1/actions`
-- `POST /api/v1/action` for `open`, `refresh`, and optionally `generatePreview`
 - `GET /api/v1/profiles`
 - `POST /api/v1/profile`
-
-#### Phase 2
-- evaluate `goLive`
-- evaluate `endStream`
 
 ### Implementation Complexity
 `Medium`
@@ -304,14 +248,12 @@ Why:
 
 ### Risks
 - confusing profile activation with announcement execution
-- exposing high-consequence publish actions too early
 - turning status into an unstable internal workflow dump
 - creating a server surface that is broader than SIP actually needs
 
 ### Dependencies
 - stable app identity/version source
 - local HTTP server layer
-- action dispatcher layer
 - lightweight status summarization layer
 - profile selection hook that does not trigger publish behavior
 
@@ -322,7 +264,6 @@ It is the best validation target for:
 
 - SIP core endpoints
 - capability flags
-- safe action exposure
 - real profile discovery
 - real profile activation
 
@@ -351,6 +292,7 @@ Likely implementation:
 - `appId`: `tidereader`
 - `name`: `TideReader`
 - `version`: current app version
+- `mode`: `standalone`
 - `protocolVersion`: `1.0`
 
 Complexity: `Low`
@@ -368,7 +310,8 @@ Likely implementation:
 
 Likely health states:
 
-- `healthy`
+- `ready`
+- `busy`
 - `degraded`
 - `error`
 
@@ -390,14 +333,12 @@ Risk:
 Likely capability flags:
 
 - `supportsStatusReporting`
-- `supportsQuickActions`
 - `supportsOverlay`
 - `supportsNowPlaying`
 
 Recommended first-pass interpretation:
 
 - `supportsStatusReporting`: true
-- `supportsQuickActions`: true
 - `supportsOverlay`: true
 - `supportsNowPlaying`: true
 - `supportsProfiles`: false in the first SIP pass
@@ -432,37 +373,6 @@ Complexity: `Low`
 
 Risk:
 - Keep the contract stable by returning summary state rather than every detection attribute.
-
-#### `GET /api/v1/actions`
-Recommended first-pass actions:
-
-- `open`
-- `refresh`
-- `openSettings`
-
-Recommended deferred actions:
-
-- `saveSettings`
-- any action that attempts to change low-level overlay styling through SIP
-
-Complexity: `Low`
-
-Recommendation:
-- Keep TideReader’s first SIP action set intentionally conservative.
-- This app is strongest as an observable participant before it becomes a configurable participant.
-
-#### `POST /api/v1/action`
-Likely action mappings:
-
-- `open` -> focus or reveal the app window
-- `refresh` -> request state refresh or playback refresh
-- `openSettings` -> open settings UI
-
-Complexity: `Low`
-
-Dependency:
-- backend route addition
-- bridge from backend route to desktop-shell UI commands where needed
 
 #### `GET /api/v1/profiles`
 Recommended first-pass behavior:
@@ -502,8 +412,6 @@ Complexity: `Deferred`
 - `GET /api/v1/health`
 - `GET /api/v1/capabilities`
 - `GET /api/v1/status`
-- `GET /api/v1/actions`
-- `POST /api/v1/action` for `open`, `refresh`, and `openSettings`
 
 #### Later Expansion
 - `GET /api/v1/profiles`
@@ -529,7 +437,6 @@ Why:
 
 ### Dependencies
 - backend route additions
-- UI-shell bridge for actions like `openSettings`
 - stable summary model for playback and overlay state
 - future product definition for named overlay profiles
 
@@ -558,7 +465,7 @@ Its architecture already includes:
 
 The main SIP challenge is not whether the app fits the protocol.
 
-The main challenge is scoping mode actions and profile behavior so they remain understandable and safe.
+The main challenge is scoping mode-oriented behavior and profile semantics so they remain understandable and safe.
 
 ### Likely SIP-v1 Endpoint Set
 
@@ -568,6 +475,7 @@ Likely implementation:
 - `appId`: `tuberswitch`
 - `name`: `TuberSwitch`
 - `version`: current app version
+- `mode`: `standalone`
 - `protocolVersion`: `1.0`
 
 Complexity: `Low`
@@ -581,7 +489,8 @@ Likely implementation:
 
 Likely health states:
 
-- `healthy`
+- `ready`
+- `busy`
 - `degraded`
 - `error`
 
@@ -603,7 +512,6 @@ Risk:
 Likely capability flags:
 
 - `supportsStatusReporting`
-- `supportsQuickActions`
 - `supportsModeSwitching`
 
 Possible later capability flag:
@@ -613,7 +521,6 @@ Possible later capability flag:
 Recommended first-pass interpretation:
 
 - `supportsStatusReporting`: true
-- `supportsQuickActions`: true
 - `supportsModeSwitching`: true
 - `supportsProfiles`: conditional and likely false in the first SIP pass unless `ModeProfiles` are deliberately promoted into a user-facing SIP profile concept
 
@@ -649,40 +556,6 @@ Complexity: `Low`
 Risk:
 - Keep the status readable.
 - Other apps should see mode state and connectivity summary, not full scene-mapping internals.
-
-#### `GET /api/v1/actions`
-Recommended first-pass actions:
-
-- `open`
-- `refresh`
-- `openSettings`
-- `switchMode`
-
-Recommended boundaries:
-
-- allow `switchMode` only for clear, explicit mode names
-- do not expose lower-level reward management or OBS inventory actions through SIP in the first pass
-
-Complexity: `Medium`
-
-Risk:
-- `switchMode` has real side effects in OBS and Twitch behavior.
-- It is lower risk than `StreamSignal goLive`, but still not a purely cosmetic action.
-
-#### `POST /api/v1/action`
-Likely action mappings:
-
-- `open` -> focus or reveal the app window
-- `refresh` -> refresh status and connected-system summary
-- `openSettings` -> open settings UI
-- `switchMode` -> activate `3D` or `PNG` mode
-
-Complexity: `Medium`
-
-Dependency:
-- local SIP server layer
-- clear action payload contract
-- stable mode-switch command path that can report success and failure cleanly
 
 #### `GET /api/v1/profiles`
 Possible implementation path:
@@ -721,8 +594,6 @@ Complexity: `Medium`
 - `GET /api/v1/health`
 - `GET /api/v1/capabilities`
 - `GET /api/v1/status`
-- `GET /api/v1/actions`
-- `POST /api/v1/action` for `open`, `refresh`, `openSettings`, and optionally `switchMode`
 
 #### Later Expansion
 - `GET /api/v1/profiles`
@@ -736,17 +607,15 @@ Only after `ModeProfiles` are intentionally confirmed as ecosystem-facing profil
 Why:
 - core endpoint mapping is straightforward
 - local SIP server layer must be added
-- action safety and profile semantics need deliberate product decisions
+- profile semantics need deliberate product decisions
 
 ### Risks
 - conflating mode switching with full profile orchestration
-- exposing external-system side effects too casually
 - leaking OBS/Twitch implementation detail into SIP payloads
 - making degraded external integrations look like total app failure
 
 ### Dependencies
 - local HTTP server layer
-- stable mode-switch action dispatcher
 - status summarization over current mode and connection state
 - explicit decision on whether `ModeProfiles` are SIP-visible profiles
 
@@ -756,7 +625,6 @@ Why:
 It is a strong fit for:
 
 - status visibility
-- compact utility actions
 - future mode-aware ecosystem participation
 
 It should adopt profiles only after the product semantics are clearer.
@@ -769,12 +637,8 @@ It should adopt profiles only after the product semantics are clearer.
   - `GET /api/v1/health`
   - `GET /api/v1/capabilities`
   - `GET /api/v1/status`
-  - `GET /api/v1/actions`
-  - `POST /api/v1/action` for safe actions
   - `GET /api/v1/profiles`
   - `POST /api/v1/profile`
-- Defer:
-  - high-consequence publish actions
 
 ### TideReader
 - Implement now:
@@ -782,8 +646,6 @@ It should adopt profiles only after the product semantics are clearer.
   - `GET /api/v1/health`
   - `GET /api/v1/capabilities`
   - `GET /api/v1/status`
-  - `GET /api/v1/actions`
-  - `POST /api/v1/action` for safe actions
 - Defer:
   - `GET /api/v1/profiles`
   - `POST /api/v1/profile`
@@ -794,8 +656,6 @@ It should adopt profiles only after the product semantics are clearer.
   - `GET /api/v1/health`
   - `GET /api/v1/capabilities`
   - `GET /api/v1/status`
-  - `GET /api/v1/actions`
-  - `POST /api/v1/action` for safe actions and optionally `switchMode`
 - Defer:
   - `GET /api/v1/profiles`
   - `POST /api/v1/profile`
@@ -804,7 +664,6 @@ It should adopt profiles only after the product semantics are clearer.
 
 ### Recommended Shared Baseline Flags
 - `supportsStatusReporting`
-- `supportsQuickActions`
 
 ### StreamSignal-Specific
 - `supportsProfiles`
@@ -846,7 +705,6 @@ Expose them through SIP only if the product intentionally defines them as user-f
 Purpose:
 - prove SIP core endpoints
 - prove capability reporting
-- prove safe action handling
 - prove real profile discovery and activation
 
 Success criteria:
@@ -861,17 +719,15 @@ Purpose:
 
 Success criteria:
 - stable playback and overlay status summary
-- conservative action model
 - no leakage of low-level settings into SIP
 
 ### Phase 3: TuberSwitch
 Purpose:
-- validate mode-oriented status and action participation
+- validate mode-oriented status participation
 - decide whether `ModeProfiles` should become full SIP-visible profiles
 
 Success criteria:
 - stable mode and connectivity status summary
-- safe `switchMode` behavior if exposed
 - clear terminology between mode and profile
 
 ## Final Conclusion
@@ -887,6 +743,6 @@ The strongest current validation outcome is this:
 
 - SIP core endpoints are ready now across all three apps
 - real profile participation is ready now only in `StreamSignal`
-- `TideReader` and `TuberSwitch` should join SIP first through identity, health, capabilities, status, and conservative actions
+- `TideReader` and `TuberSwitch` should join SIP first through identity, health, capabilities, and status
 
 That sequence preserves product independence, matches current architectures, and gives the Starsong ecosystem the highest chance of proving SIP-v1 without overreaching.
