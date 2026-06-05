@@ -1,29 +1,19 @@
 # StarsongDesignSystem
 
-StarsongDesignSystem is the authoritative documentation repository for the Starsong Tools ecosystem.
+StarsongDesignSystem is the central documentation hub for the Starsong Tools ecosystem.
 
-This repository is the home for:
-
-- design standards
-- ecosystem architecture
-- integration protocols
-- profile standards
-- branding standards
-- future application specifications
-- shared ecosystem decisions
-
-It is documentation-first. No application code is moved here, and no shared component library is created at this stage.
+It exists to keep ecosystem standards, architecture decisions, application overviews, and roadmap planning in one practical place without introducing unnecessary structure.
 
 ## What Is Starsong Tools
-Starsong Tools is a collection of focused creator and streaming utilities.
+Starsong Tools is a collection of focused creator and streaming utilities that can operate independently or together as a connected ecosystem.
 
-Applications should:
-
-- operate independently
-- integrate when available
-- remain local-first
-- minimize complexity
-- share a consistent experience
+## Core Principles
+- Standalone First
+- Local First
+- Creator Focused
+- Simple Over Complex
+- Consistency Over Novelty
+- Integration Without Dependency
 
 ## Current Applications
 
@@ -39,51 +29,34 @@ Avatar and profile switching.
 ### LivePanel
 Future ecosystem dashboard and orchestration application.
 
-## Ecosystem Principles
-- Standalone First
-- Local First
-- Creator Focused
-- Simple Over Complex
-- Consistency Over Novelty
-- Integration Without Dependency
+## Repository Purpose
+This repository contains:
 
-## Repository Structure
-- `docs/design-system`
-  Shared design language, design system standards, and review findings.
-- `docs/architecture`
-  Ecosystem protocols, profiles, and architectural guidance.
-- `docs/branding`
-  Vision, naming, attribution, and identity rules.
-- `docs/applications`
-  High-level summaries for current and future Starsong applications.
-- `docs/roadmap`
-  Ecosystem planning, future priorities, and idea holding areas.
-- `assets`
-  Reserved for logos, icons, palette references, and mockups.
-- `templates`
-  Reusable templates for future application, feature, and protocol specifications.
+- design standards
+- architecture standards
+- integration protocols
+- ecosystem planning
+- application overviews
 
-## Current Core Standards
-- [Starsong Design System v1.1](docs/design-system/Starsong-Design-System-v1.1.md)
-- [Starsong Ecosystem Review v1.1](docs/design-system/Starsong-Ecosystem-Review-v1.1.md)
-- [SIP-v1](docs/architecture/SIP-v1.md)
-- [Starsong Profiles v1](docs/architecture/Starsong-Profiles-v1.md)
+## Current Structure
+- [DesignSystem](DesignSystem)
+- [Architecture](Architecture)
+- [Applications](Applications)
+- [Roadmap](Roadmap)
+
+## Core Standards
+- [Starsong Design System v1.1](DesignSystem/Starsong-Design-System-v1.1.md)
+- [Starsong Ecosystem Review v1.1](DesignSystem/Starsong-Ecosystem-Review-v1.1.md)
+- [SIP-v1](Architecture/SIP-v1.md)
+- [Starsong Profiles v1](Architecture/Starsong-Profiles-v1.md)
 
 ## Repository Standards
 
-### Documentation First
-New ecosystem decisions should be documented before implementation.
-
-### Versioned Specifications
-Major standards should be versioned.
-
-Examples:
-
-- `Design System v1.1`
-- `SIP-v1`
-- `Profiles v1`
+### Documentation Before Implementation
+Major ecosystem decisions should be documented before implementation begins.
 
 ### Single Source of Truth
-Avoid duplicating ecosystem standards across application repositories.
+Ecosystem-level standards should live here. Application-specific implementation details should remain in application repositories.
 
-Application repositories should reference StarsongDesignSystem whenever possible.
+### Simplicity First
+The repository should stay lightweight, navigable, and grounded in current needs.
