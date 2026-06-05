@@ -535,7 +535,6 @@ A developer should be able to create a new Starsong application, implement SIP-v
 - health reporting
 - status reporting
 - capability reporting
-- action support
 - profile support
 - cross-application interoperability
 
