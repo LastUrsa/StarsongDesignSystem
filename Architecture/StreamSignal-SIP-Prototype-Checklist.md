@@ -78,7 +78,6 @@ Checklist:
 - application name is human-readable and consistent
 - version can be reported reliably
 - `mode` is present and currently reports `standalone`
-- reported `protocolVersion` matches `SIP-v1`
 - identity response is simple and does not leak internal implementation details
 
 Success signal:

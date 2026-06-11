@@ -11,9 +11,19 @@ It focuses on:
 
 The goal is to validate SIP-v1 against the current application architectures and define what a realistic first implementation would likely include for each product.
 
-This is a planning and validation document only.
+This began as a planning and validation document. As of the 2026-06-11 suite scan, the first practical SIP adoption wave has shipped or been prepared in the app repositories, so this document should now be read as historical validation plus implementation context.
 
 No application code changes are proposed here.
+
+## Current Adoption Snapshot
+Last scanned: 2026-06-11.
+
+| Application | Current local release state | Implemented SIP state |
+| --- | --- | --- |
+| StreamSignal | `v0.4.0` is tagged and documented; local `wails.json` still reports `0.3.1`, which should be reconciled before the next metadata-sensitive release pass. | SIP implements app, health, capabilities, status, profiles, current profile, profile activation, announce, announce confirmation, announce status, end-stream, and end-stream status endpoints. |
+| TideReader | `v0.5.0` is tagged and project metadata reports `0.5.0`. | SIP implements app, health, capabilities, status, profiles, current profile, and profile activation endpoints. |
+| TuberSwitch | `v0.6.0` is tagged and Wails metadata reports `0.6.0`. | SIP implements app, health, capabilities, status, profiles, current profile, and profile activation endpoints. |
+| LivePanel | `v0.1.0` is tagged and metadata reports `0.1.0`. | LivePanel consumes the SIP/service-mode surfaces from StreamSignal, TideReader, and TuberSwitch. |
 
 ## Scope
 This review is based on:
@@ -54,6 +64,8 @@ The main uneven area is profile support.
 1. `StreamSignal`
 2. `TideReader`
 3. `TuberSwitch`
+
+This ordering is now historical context. The current app states show all three app families participating in SIP, with StreamSignal carrying the highest-impact workflow endpoints and TideReader/TuberSwitch exposing narrower profile/status surfaces.
 
 ### Why This Order Is Best
 `StreamSignal` has the strongest value-to-risk ratio because it already has named profiles, clear workflow state, and obvious SIP mappings.
@@ -104,11 +116,11 @@ Its architecture already includes:
 - logs and diagnostics
 - destination and settings state
 
-The main missing technical layer is not domain mapping.
+At the time of the original review, the main missing technical layer was a local SIP HTTP surface because the application was Wails-bound rather than already exposing a localhost REST contract.
 
-The main missing layer is a local SIP HTTP surface because the application is currently Wails-bound rather than already exposing a localhost REST contract.
+That layer now exists in the StreamSignal SIP implementation.
 
-### Likely SIP-v1 Endpoint Set
+### Originally Expected SIP-v1 Endpoint Set
 
 #### `GET /api/v1/app`
 Likely implementation:
@@ -117,7 +129,6 @@ Likely implementation:
 - `name`: `StreamSignal`
 - `version`: current app version
 - `mode`: `standalone`
-- `protocolVersion`: `1.0`
 
 Complexity: `Low`
 
@@ -293,7 +304,6 @@ Likely implementation:
 - `name`: `TideReader`
 - `version`: current app version
 - `mode`: `standalone`
-- `protocolVersion`: `1.0`
 
 Complexity: `Low`
 
@@ -476,7 +486,6 @@ Likely implementation:
 - `name`: `TuberSwitch`
 - `version`: current app version
 - `mode`: `standalone`
-- `protocolVersion`: `1.0`
 
 Complexity: `Low`
 

@@ -166,7 +166,6 @@ The main complexity is adding a new local protocol surface to a Wails app withou
 - product name
 - `wails.json` product version
 - fixed ecosystem identifier
-- fixed SIP protocol version
 
 ### Proposed implementation approach
 Return a minimal identity object:
@@ -175,7 +174,6 @@ Return a minimal identity object:
 - `name`: `StreamSignal`
 - `version`: current application version
 - `mode`: `standalone`
-- `protocolVersion`: `1.0`
 
 ### Estimated difficulty
 `Low`
@@ -451,7 +449,6 @@ Can another SIP participant discover `StreamSignal`?
 
 Validation goal:
 - identity endpoint is reachable
-- protocol version is readable
 - capability endpoint is reachable after discovery
 
 ### Status Validation

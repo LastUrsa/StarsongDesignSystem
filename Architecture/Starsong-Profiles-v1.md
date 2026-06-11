@@ -340,10 +340,10 @@ POST /api/v1/profile
 
 as defined by SIP-v1.
 
-## Future LivePanel Compatibility
+## LivePanel Compatibility
 LivePanel is not required for Profiles v1.
 
-However, Profiles v1 should be designed so that a future LivePanel implementation can:
+However, Profiles v1 should be designed so that LivePanel and future orchestration surfaces can:
 
 - discover profile-capable applications
 - build Starsong Profiles

@@ -43,8 +43,18 @@ Reasoning:
 - It contains structured app areas for destinations, profiles, settings, and workflow execution.
 - It has the strongest existing Starsong shell and workspace patterns.
 - It already influenced the design-system documentation because its application structure is comparatively mature.
+- It now exposes a localhost-only SIP surface and service-mode launch behavior for LivePanel integration.
 
 It is still evolving, but the foundation appears stable and ecosystem-defining.
+
+## Current Implementation State
+Last scanned: 2026-06-11.
+
+- Current release line: `v0.4.0` is tagged and documented as the LivePanel/SIP control release.
+- Local metadata note: `wails.json` still reports product version `0.3.1`; reconcile this before the next release publication or metadata-dependent validation pass.
+- SIP status: implemented over localhost.
+- Service mode: `--service` and `--show` are documented for LivePanel-managed launches.
+- LivePanel-facing capabilities include app identity, health, capabilities, status, profiles, current profile, profile activation, Go Live, duplicate confirmation, announcement status, End Stream, and End Stream status.
 
 ## Existing Profile Opportunities
 Classification: `High`
@@ -62,26 +72,26 @@ Existing alignment includes:
 This is the clearest existing implementation of an application-owned profile system in the current Starsong ecosystem.
 
 ## SIP Opportunities
-Classification: `High`
+Classification: `Implemented / High`
 
-Natural SIP opportunities include:
+Implemented SIP capabilities include:
 
-- status reporting for publish readiness or recent workflow state
-- health reporting for app readiness
-- lightweight actions such as open or refresh
+- status reporting for app and active-profile state
+- health reporting for app readiness and recovery concerns
 - profile discovery through existing announcement profiles
 - profile activation through existing profile selection concepts
-- future ecosystem participation in orchestration workflows
+- explicit Go Live and End Stream workflow execution for the active profile
+- last-run operation status for LivePanel control surfaces
 
-StreamSignal is one of the strongest candidates for early SIP participation because it already has meaningful state, actions, and named profiles.
+StreamSignal remains one of the strongest SIP participants because it already has meaningful state, actions, and named profiles.
 
 ## Future Direction
 Promising ecosystem-level opportunities include:
 
-- adopting SIP identity, health, and status endpoints
+- continuing to refine SIP identity, health, and status endpoints
 - participating in Starsong Profile activation
 - exposing ecosystem-friendly summary state
-- acting as a strong participant in future LivePanel workflows
+- acting as a strong participant in LivePanel and future cross-app workflows
 
 The opportunity is not to make StreamSignal the center of the ecosystem. The opportunity is to let it contribute its owned workflow domain cleanly and predictably.
 

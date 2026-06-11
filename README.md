@@ -18,16 +18,26 @@ Starsong Tools is a collection of focused creator and streaming utilities that c
 ## Current Applications
 
 ### StreamSignal
-Multi-destination stream announcements.
+Multi-destination stream announcements, reusable announcement profiles, SIP-driven Go Live and End Stream workflows, and service-mode participation for LivePanel.
 
 ### TideReader
-Music and now-playing overlays.
+Music and now-playing overlays with saved overlay profiles, local output generation, overlay preview data, and SIP status/profile participation.
 
 ### TuberSwitch
-Avatar and profile switching.
+Avatar/profile switching for OBS and Twitch reward alignment, with saved stream profiles, app detection, service mode, and SIP profile activation.
 
 ### LivePanel
-Future ecosystem dashboard and orchestration application.
+Local desktop control panel for the Starsong Tools suite. LivePanel can launch supported apps in service mode, show module status, switch active profiles, run StreamSignal workflows, and preview TideReader overlay state.
+
+## Current Suite Snapshot
+Last scanned: 2026-06-11.
+
+| Application | Current local state | Ecosystem integration state |
+| --- | --- | --- |
+| StreamSignal | `v0.4.0` release line is tagged and documented; local `wails.json` still reports product version `0.3.1`, so release metadata should be reconciled before the next publication pass. | SIP, service mode, active-profile status, Go Live, duplicate confirmation, End Stream, and operation status endpoints are documented in the app repo. |
+| TideReader | `v0.5.0` is tagged and project metadata reports `0.5.0`. | SIP exposes app, health, capabilities, status, profile list, current profile, and profile activation over localhost. |
+| TuberSwitch | `v0.6.0` is tagged and Wails metadata reports `0.6.0`. | SIP exposes app, health, capabilities, status, profiles, current profile, and profile activation over localhost. |
+| LivePanel | `v0.1.0` is tagged and Wails/frontend metadata report `0.1.0`. | Consumes StreamSignal, TideReader, and TuberSwitch SIP/service-mode surfaces; current app requirements are StreamSignal `v0.4.0`, TideReader `v0.5.0`, and TuberSwitch `v0.6.0`. |
 
 ## Repository Purpose
 This repository contains:
@@ -49,6 +59,7 @@ This repository contains:
 - [Starsong Ecosystem Review v1.1](DesignSystem/Starsong-Ecosystem-Review-v1.1.md)
 - [SIP-v1](Architecture/SIP-v1.md)
 - [Starsong Profiles v1](Architecture/Starsong-Profiles-v1.md)
+- [Starsong Installer Standard v1](Architecture/Starsong-Installer-Standard-v1.md)
 
 ## Repository Standards
 

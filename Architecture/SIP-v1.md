@@ -17,7 +17,19 @@ SIP-v1 is an ecosystem protocol. It is not owned by any individual application.
 
 SIP-v1 is intentionally not a public application API.
 
-Its purpose is to let future orchestration tools such as `LivePanel` identify modules, verify health, discover capabilities, read status, and work with profiles without product-specific integration logic.
+Its purpose is to let orchestration tools such as `LivePanel` identify modules, verify health, discover capabilities, read status, and work with profiles without product-specific integration logic.
+
+## Current Implementation Note
+Last scanned: 2026-06-11.
+
+SIP-v1 is the baseline ecosystem contract. Current application implementations expose these SIP surfaces:
+
+- StreamSignal exposes SIP for app identity, health, capabilities, status, profiles, current profile, profile activation, Go Live, duplicate confirmation, announcement status, End Stream, and End Stream status.
+- TideReader exposes SIP for app identity, health, capabilities, status, profiles, current profile, and profile activation.
+- TuberSwitch exposes SIP for app identity, health, capabilities, status, profiles, current profile, and profile activation.
+- LivePanel v0.1.0 consumes these localhost SIP/service-mode surfaces.
+
+Consumers should inspect capabilities and degrade gracefully when an endpoint or capability is unavailable.
 
 ## Goals
 
@@ -42,7 +54,7 @@ SIP-v1 does not attempt to provide:
 - service lifecycle management
 - shared data storage
 
-These may be considered for future protocol versions.
+These may be considered in future protocol updates.
 
 ## Design Principles
 
@@ -118,7 +130,7 @@ Applications must continue functioning when:
 
 - SIP is unavailable
 - other applications are offline
-- protocol versions differ
+- capabilities differ
 - capability requests fail
 - discovery fails
 
@@ -135,8 +147,8 @@ No central coordinator exists.
 
 No application has special protocol privileges.
 
-### Future LivePanel Participation
-LivePanel is expected to become a future Starsong Tools application.
+### LivePanel Participation
+LivePanel is now a Starsong Tools application and currently consumes SIP/service-mode surfaces from StreamSignal, TideReader, and TuberSwitch.
 
 However:
 
@@ -214,10 +226,9 @@ Allow applications to locate SIP-compliant participants.
 When an application discovers another application:
 
 1. Query application identity.
-2. Validate protocol version.
-3. Retrieve capabilities.
-4. Determine supported integrations.
-5. Enable optional features.
+2. Retrieve capabilities.
+3. Determine supported integrations.
+4. Enable optional features.
 
 ### Unknown Applications
 Applications must gracefully ignore unknown participants.
@@ -235,8 +246,7 @@ Future applications should not require updates to existing applications.
   "appId": "streamsignal",
   "name": "StreamSignal",
   "version": "0.3.0",
-  "mode": "standalone",
-  "protocolVersion": "1.0"
+  "mode": "standalone"
 }
 ```
 
@@ -271,9 +281,6 @@ service
 ```
 
 Current implementations may always return `standalone` until service-mode support exists.
-
-#### `protocolVersion`
-Implemented SIP version.
 
 ## Health Reporting
 
@@ -441,21 +448,10 @@ Applications must ignore:
 
 whenever practical.
 
-### Version Negotiation
-Applications should compare:
+### Compatibility Policy
+Applications should inspect identity and capabilities before enabling integrations.
 
-```json
-{
-  "protocolVersion": "1.0"
-}
-```
-
-before enabling integrations.
-
-### Version Policy
-Minor additions should remain backward compatible.
-
-Breaking changes require a protocol version increment.
+Additions should remain backward compatible whenever practical. Breaking changes should be handled through capability changes, new endpoints, or a new documented contract.
 
 ## Security
 
@@ -474,7 +470,7 @@ Authentication is out of scope for SIP-v1.
 
 Local communication is considered trusted.
 
-Future protocol versions may introduce authentication if required.
+Future protocol updates may introduce authentication if required.
 
 ## Future Integration Examples
 The following examples are illustrative only.

@@ -35,55 +35,64 @@ Its ecosystem value comes from:
 It exists separately because avatar switching is a discrete workflow with different responsibilities than announcements or now-playing overlays.
 
 ## Current Maturity
-Classification: `Active Development`
+Classification: `Mature Foundation`
 
 Reasoning:
 - The application has a clear and focused purpose.
 - Its core workflow is practical and coherent.
-- It appears functionally meaningful today, but narrower and less ecosystem-mature than StreamSignal.
-- Its profile-like concepts are present but not yet fully generalized as a broad application profile system.
+- It now has saved reusable stream profiles with mode, OBS scene/source choices, and Twitch reward enablement.
+- It exposes service mode and a localhost-only SIP surface for LivePanel integration.
 
-It has a solid product direction, but its ecosystem abstractions are still relatively early.
+It remains narrower than StreamSignal by design, but its ecosystem abstractions are now concrete enough to treat as a mature foundation for avatar/profile state.
+
+## Current Implementation State
+Last scanned: 2026-06-11.
+
+- Current release line: `v0.6.0`.
+- SIP status: implemented over localhost.
+- Service mode: `--service` and `--show` are documented.
+- LivePanel-facing capabilities include app identity, health, capabilities, status, profiles, current profile, and profile activation.
+- Status includes compact OBS, redeem, and app-detection summaries without exposing OBS configuration APIs, Twitch reward definition APIs, credentials, or profile CRUD.
 
 ## Existing Profile Opportunities
-Classification: `Medium`
+Classification: `High`
 
 TuberSwitch has meaningful alignment with Starsong Profiles v1 through:
 
-- `ModeProfiles`
-- current mode concepts
-- startup mode behavior
-- reward and scene behavior tied to active mode
+- saved stream profiles
+- current profile and current mode concepts
+- OBS scene/source choices tied to the active profile
+- Twitch reward enablement tied to the active profile
+- app detection that applies the most recently used profile for a detected mode
+- SIP profile listing and activation
 
-This is stronger than having no profile concept at all, but the current model seems centered on built-in mode behavior rather than a broader user-managed named profile system.
-
-That makes it a medium-alignment candidate rather than a high-alignment one.
+This makes TuberSwitch a strong Starsong Profiles participant for avatar presentation state, while profile CRUD and low-level OBS/Twitch configuration remain owned by TuberSwitch.
 
 ## SIP Opportunities
-Classification: `Medium`
+Classification: `Implemented / High`
 
-Natural SIP opportunities include:
+Implemented SIP capabilities include:
 
 - health reporting
 - status reporting for current mode and connection state
-- lightweight actions such as open, refresh, or switch mode
-- future profile discovery built on top of expanded mode-profile concepts
-- future ecosystem visibility and coordination
+- profile discovery through saved stream profiles
+- profile activation through TuberSwitch's existing profile path
+- ecosystem visibility for avatar mode, OBS summary, reward state, and app-detection state
 
-TuberSwitch fits SIP reasonably well for status and actions, but its profile activation story would benefit from a clearer application-owned named profile model.
+TuberSwitch now fits SIP well for identity, health, status, and profile activation. Broader command execution and low-level configuration remain intentionally outside the SIP surface.
 
 ## Future Direction
 Promising ecosystem-level opportunities include:
 
-- SIP participation for mode state and health
-- profile-system expansion beyond built-in mode handling
+- continued SIP participation for mode state and health
+- profile-system expansion around creator-managed presentation profiles
 - stronger relationship to Starsong Profiles
-- future LivePanel visibility for avatar-mode and reward-state awareness
+- richer LivePanel and future ecosystem visibility for avatar-mode and reward-state awareness
 
 Its best ecosystem future is as a focused participant that exposes useful mode-related state without losing its simplicity.
 
 ## Risks and Constraints
 - TuberSwitch should not become an over-automated orchestration layer for unrelated creator workflows.
 - Integration should not blur the line between app-owned scene/reward logic and ecosystem-level coordination.
-- A future profile model should remain understandable to creators rather than becoming a technical mapping system first.
+- Future profile-model expansion should remain understandable to creators rather than becoming a technical mapping system first.
 - Independence should be preserved because the app’s value comes from its focused utility behavior.

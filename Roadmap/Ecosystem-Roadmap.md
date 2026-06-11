@@ -5,14 +5,20 @@
 - Ecosystem Review v1.1
 - SIP-v1
 - Profiles v1
+- Installer Standard v1
+- Initial SIP adoption in StreamSignal, TideReader, and TuberSwitch
+- LivePanel v0.1.0 foundation for service-mode launch, module status, profile switching, and selected workflow controls
 
 ## In Progress
-No active ecosystem standards work is formally tracked here yet.
+- Post-adoption SIP documentation alignment
+- Release metadata and compatibility checks across StreamSignal, TideReader, TuberSwitch, and LivePanel
+- Installer-standard adoption in application release packaging
 
 ## Next Priorities
-- SIP Readiness Review
-- SIP Adoption Review
-- LivePanel Specification
+- Reconcile StreamSignal `v0.4.0` release state with local Wails product metadata
+- Update SIP documentation around implemented capabilities and compatibility expectations
+- Formalize LivePanel compatibility policy for minimum dependent app versions
+- Align application installer metadata and default install roots with Installer Standard v1
 - Cross-Application Profile Validation
 
 These are recommendations, not commitments.
