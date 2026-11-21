@@ -27,17 +27,22 @@ Music and now-playing overlays with saved overlay profiles, local output generat
 Avatar/profile switching for OBS and Twitch reward alignment, with saved stream profiles, app detection, service mode, and SIP profile activation.
 
 ### LivePanel
-Local desktop control panel for the Starsong Tools suite. LivePanel can launch supported apps in service mode, show module status, switch active profiles, run StreamSignal workflows, and preview TideReader overlay state.
+Local desktop control panel for the Starsong Tools suite. LivePanel can launch supported apps in service mode, show module status, switch active profiles, run StreamSignal workflows, and preview TideReader overlay state. The LupusAria integration adds bot controls and diagnostics to LivePanel.
+
+### LupusAria
+Local Twitch chat bot with AI chat responses, AutoSO, announcements, ad alerts, Media Actions, raffle, and Stream Wrap-Up. The SIP v1 integration adds service mode and LivePanel controls. [LupusAria overview](Applications/LupusAria.md)
 
 ## Current Suite Snapshot
-Last scanned: 2026-06-11.
 
-| Application | Current local state | Ecosystem integration state |
+Updated 2026-11-20 using the application repositories and their release tags.
+
+| Application | Tagged release | Ecosystem integration |
 | --- | --- | --- |
-| StreamSignal | `v0.4.0` release line is tagged and documented; local `wails.json` still reports product version `0.3.1`, so release metadata should be reconciled before the next publication pass. | SIP, service mode, active-profile status, Go Live, duplicate confirmation, End Stream, and operation status endpoints are documented in the app repo. |
-| TideReader | `v0.5.0` is tagged and project metadata reports `0.5.0`. | SIP exposes app, health, capabilities, status, profile list, current profile, and profile activation over localhost. |
-| TuberSwitch | `v0.6.0` is tagged and Wails metadata reports `0.6.0`. | SIP exposes app, health, capabilities, status, profiles, current profile, and profile activation over localhost. |
-| LivePanel | `v0.1.0` is tagged and Wails/frontend metadata report `0.1.0`. | Consumes StreamSignal, TideReader, and TuberSwitch SIP/service-mode surfaces; current app requirements are StreamSignal `v0.4.0`, TideReader `v0.5.0`, and TuberSwitch `v0.6.0`. |
+| StreamSignal | `v1.0.0` | SIP profiles and publishing workflows, including duplicate confirmation and operation status. |
+| TideReader | `v1.0.0` | SIP profiles, browser support, and LivePanel overlay preview. |
+| TuberSwitch | `v1.0.1` | SIP profiles, manual redeem controls, and OBS status. |
+| LivePanel | `v1.0.1` | Consumes the three released companion integrations. The LupusAria companion is in development on the integration branch. |
+| LupusAria | `v0.11.0` | The integration branch adds headless SIP v1 service mode, bot lifecycle, live feature switches, and recent logs. |
 
 ## Repository Purpose
 This repository contains:
