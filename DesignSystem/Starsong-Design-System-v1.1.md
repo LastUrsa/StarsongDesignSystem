@@ -664,3 +664,10 @@ Use only when dense comparison or scanning is genuinely needed.
 
 ## Version Note
 Starsong Design System v1.1 is the first ecosystem-informed expansion of the design system. It should be used as the working reference for new Starsong applications and as the guidance baseline for gradual improvement of existing products.
+
+
+## Companion cards and detail drawers
+
+LivePanel’s stream setup uses the same card structure across companion apps. Align role labels, icons, app names, details buttons, and status rows. Reserve a consistent control row and show the owning app’s profile selector when supported. Keep labels readable and reflow the card grid as the window narrows.
+
+Use the shared drawer surfaces for application details. Group related switches with clear labels and show when a saved preference is inactive or still applying. Keep normal switches neutral. Distinguish on and off by thumb position, contrast, and text. Place activation errors alongside the affected switch. Keep recent logs in their own section and identify severity with text as well as color.

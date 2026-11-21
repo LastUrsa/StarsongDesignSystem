@@ -10,14 +10,13 @@
 - LivePanel v0.1.0 foundation for service-mode launch, module status, profile switching, and selected workflow controls
 
 ## In Progress
-- Post-adoption SIP documentation alignment
-- Release metadata and compatibility checks across StreamSignal, TideReader, TuberSwitch, and LivePanel
+- LupusAria SIP v1 service mode and LivePanel integration, including lifecycle, feature switches, and diagnostics
+- Release metadata and compatibility checks across StreamSignal, TideReader, TuberSwitch, LivePanel, and LupusAria
 - Installer-standard adoption in application release packaging
 
 ## Next Priorities
-- Reconcile StreamSignal `v0.4.0` release state with local Wails product metadata
 - Update SIP documentation around implemented capabilities and compatibility expectations
-- Formalize LivePanel compatibility policy for minimum dependent app versions
+- Record a minimum supported LupusAria release once the SIP integration is published
 - Align application installer metadata and default install roots with Installer Standard v1
 - Cross-Application Profile Validation
 

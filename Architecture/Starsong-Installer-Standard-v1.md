@@ -18,6 +18,7 @@ This standard applies to current and future Starsong desktop applications, inclu
 - TideReader
 - TuberSwitch
 - LivePanel
+- LupusAria
 
 ## Design Principles
 
@@ -92,7 +93,7 @@ Default install location:
 Executable:
 
 ```text
-%ProgramFiles%\Starsong Tools\TideReader\TideReader.Desktop.exe
+%ProgramFiles%\Starsong Tools\TideReader\TideReader.exe
 ```
 
 ### TuberSwitch
@@ -120,6 +121,16 @@ Executable:
 ```text
 %ProgramFiles%\Starsong Tools\LivePanel\LivePanel.exe
 ```
+
+### LupusAria
+
+Default executable:
+
+```text
+%ProgramFiles%\Starsong Tools\LupusAria\LupusAria.exe
+```
+
+LivePanel uses this executable for discovery and passes `--service` for headless operation. LupusAria stores user data under `%APPDATA%\Starsong Tools\LupusAria`.
 
 ## Custom Install Locations
 Users may choose a custom install location when the installer technology supports it.
@@ -191,7 +202,7 @@ StreamSignal is installed if this executable exists:
 TideReader is installed if this executable exists:
 
 ```text
-%ProgramFiles%\Starsong Tools\TideReader\TideReader.Desktop.exe
+%ProgramFiles%\Starsong Tools\TideReader\TideReader.exe
 ```
 
 TuberSwitch is installed if this executable exists:
@@ -263,7 +274,7 @@ As of the 2026-06-11 review, this is a target standard, not a claim that every c
 Known adoption items:
 
 - StreamSignal and TuberSwitch currently derive their default NSIS install path from Wails company/product metadata; their publisher/company metadata should move to `Starsong Tools`.
-- TideReader currently uses `TideReader.Desktop.exe` as the desktop executable and should keep that executable name unless the application itself changes.
+- LivePanel prefers `TideReader.exe` and retains `TideReader.Desktop.exe` as a legacy discovery fallback.
 - TideReader installer metadata currently uses a legacy publisher value and should move to `Starsong Tools`.
 - LivePanel should prefer the standard `%ProgramFiles%\Starsong Tools\<App>` paths while retaining existing override, development, and legacy fallback candidates.
 

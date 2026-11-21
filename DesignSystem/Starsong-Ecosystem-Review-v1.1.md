@@ -1,7 +1,7 @@
 # Starsong Ecosystem Review for Design System v1.1
 
 ## Scope
-This review covers the current Starsong Tools applications:
+This historical review covers the three applications used to establish the v1.1 baseline. The [current suite snapshot](../README.md#current-suite-snapshot) includes the later additions:
 
 - StreamSignal
 - TideReader

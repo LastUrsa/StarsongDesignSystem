@@ -14,13 +14,13 @@ Its purpose is to provide:
 The current vision is not to centralize all creator workflows into one large application. LivePanel gives the ecosystem a local-first coordination and visibility layer while leaving application-owned workflows in their owning apps.
 
 ## Current Implementation State
-Last scanned: 2026-06-11.
 
-- Current release line: `v0.1.0`.
-- Supported apps: StreamSignal, TideReader, and TuberSwitch.
-- Minimum dependent versions listed by LivePanel: StreamSignal `v0.4.0`, TideReader `v0.5.0`, and TuberSwitch `v0.6.0`.
-- Current capabilities include service-mode launch, `--show` restoration, module status, SIP diagnostics, active profile switching, StreamSignal Go Live and End Stream workflows, and TideReader overlay preview.
-- LivePanel stores module location/configuration data, but not app-owned credentials, overlay/profile data, destination secrets, or profile storage.
+Updated 2026-11-20.
+
+- LivePanel `v1.0.1` supports StreamSignal, TideReader, and TuberSwitch at `v1.0.0` or newer. It launches companion services, coordinates profiles and StreamSignal workflows, previews TideReader overlays, and applies supported browser or redeem controls.
+- The LupusAria integration branch adds a fourth setup card, a feature and logs drawer, executable discovery, and a separate bot result for Go Live and End Stream. LupusAria can be idle while its SIP service stays connected.
+- The four setup cards share a layout and responsive grid. A profile selector appears when the owning app supports profiles. LupusAria shows bot status and uses grouped, neutral feature switches in its drawer.
+- LivePanel stores executable locations and local operational diagnostics. Companion apps own credentials, persisted settings, profiles, and provider data.
 
 ## Ecosystem Role
 LivePanel is intended to fill the visibility and coordination gap between independent Starsong applications.

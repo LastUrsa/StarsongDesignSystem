@@ -20,14 +20,15 @@ SIP-v1 is intentionally not a public application API.
 Its purpose is to let orchestration tools such as `LivePanel` identify modules, verify health, discover capabilities, read status, and work with profiles without product-specific integration logic.
 
 ## Current Implementation Note
-Last scanned: 2026-06-11.
+Updated 2026-11-20.
 
 SIP-v1 is the baseline ecosystem contract. Current application implementations expose these SIP surfaces:
 
 - StreamSignal exposes SIP for app identity, health, capabilities, status, profiles, current profile, profile activation, Go Live, duplicate confirmation, announcement status, End Stream, and End Stream status.
 - TideReader exposes SIP for app identity, health, capabilities, status, profiles, current profile, and profile activation.
 - TuberSwitch exposes SIP for app identity, health, capabilities, status, profiles, current profile, and profile activation.
-- LivePanel v0.1.0 consumes these localhost SIP/service-mode surfaces.
+- LivePanel v1.0.1 consumes these localhost SIP and service-mode surfaces.
+- The LupusAria integration branch adds a headless SIP service and feature controls to LivePanel.
 
 Consumers should inspect capabilities and degrade gracefully when an endpoint or capability is unavailable.
 
@@ -199,7 +200,8 @@ Reserved ranges:
 47020-47029 StreamSignal
 47030-47039 TideReader
 47040-47049 TuberSwitch
-47050-47099 Future Applications
+47050       LupusAria
+47051-47099 Future Applications
 ```
 
 Applications may select available ports within their reserved range.
@@ -261,6 +263,7 @@ Examples:
 streamsignal
 tidereader
 tuberswitch
+lupusaria
 livepanel
 ```
 
@@ -416,6 +419,17 @@ Examples:
 ```
 
 Consumers should never depend on extension endpoints for core SIP functionality.
+
+### LupusAria service extension
+
+LupusAria exposes the core app, health, capabilities, and status routes on loopback. Service health describes SIP availability. Bot state describes the Twitch session and can be idle, starting, running, stopping, or failed.
+
+- `bot-lifecycle` enables `POST /api/v1/bot/start` and `POST /api/v1/bot/stop`.
+- `bot-features` enables `GET /api/v1/features` and updates through `POST /api/v1/features`. Responses distinguish saved preference and effective state.
+- `recent-logs` enables `GET /api/v1/logs` with a bounded operational feed.
+- `diagnostics` enables `GET /api/v1/diagnostics`.
+
+A successful stop leaves discovery and diagnostics available. The service uses SIP request and operation IDs for its action results. Secrets, chat transcripts, and generated content stay outside SIP. LupusAria owns these routes and tests them with Newman in PR and release validation.
 
 ## Error Handling
 
